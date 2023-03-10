@@ -11,6 +11,7 @@ const ModuleVideoPage = () => {
   const moduleNumber = location.state.moduleNumber;
   const portfolioSlug = location.state.portfolioSlug;
   const [datav, setDatav] = useState([]);
+  const [toggle, setToggle] = useState("1");
 
   useEffect(() => {
     getVideo();
@@ -28,11 +29,17 @@ const ModuleVideoPage = () => {
     setDatav(json);
   };
 
-  
   const arr = datav.videos;
-console.log(".....",datav);
-console.log(".11111....",arr);
-  const [toggle, setToggle] = useState("1");
+  const pdf = datav.pdf;
+
+  const openInNewTab = (url) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+    if (newWindow) newWindow.opener = null
+  }
+  const onClickUrl = (url) => {
+    return () => openInNewTab(url)
+  }
+
   return (
     <>
       <Nav />
@@ -46,7 +53,6 @@ console.log(".11111....",arr);
 
                 {toggle === item._id ? (
                   <>
-                    {/* <p>{videoTitle}</p> */}
                   </>
                 ) : null}
               </section>
@@ -54,20 +60,27 @@ console.log(".11111....",arr);
               <section className="video-playlist">
                 {toggle === item._id ? (
                   <>
-                    {/* <p>{videoLink}</p> */}
                     <video onContextMenu={(e) => e.preventDefault()}
                       width="100%"
                       height="100%"
                       src={item.videoLink}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       controls
-                      
                       controlsList="nodownload"
                     ></video>
                   </>
                 ) : null}
               </section>
             </div>
+
+            {pdf &&
+              pdf.map((item) => {
+                return (
+                  <div key={item._id}>
+                    <h2 style={{ cursor: 'pointer' }} onClick={onClickUrl(item.pdfLink)}>{item.pdfName}</h2>
+                  </div>
+                );
+              })}
           </>
         );
       })}

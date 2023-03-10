@@ -27,7 +27,7 @@ function Index() {
     getVideo();
   }, []);
 
-  console.log("==> ", datav)
+  // console.log("==> ", datav)
 
   const Record_home = datav;
   return (
